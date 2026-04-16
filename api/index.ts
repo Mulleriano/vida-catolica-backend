@@ -14,12 +14,11 @@ export default async function handler(req: any, res: any) {
 
   const origin = req.headers.origin;
 
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  // if (origin && allowedOrigins.includes(origin)) {
-  //   res.setHeader("Access-Control-Allow-Origin", origin);
-  // } else if (!origin) {
-  //   res.setHeader("Access-Control-Allow-Origin", "*");
-  // }
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  } else if (!origin) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+  }
 
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader(
