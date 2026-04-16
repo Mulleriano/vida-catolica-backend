@@ -7,16 +7,25 @@ export const typeDefs = `#graphql
         imagemUrl: String
     }
 
-    type Lirutgia {
+    type ConteudoLeitura {
+        referencia: String
+        titulo: String
+        texto: String
+    }
+
+    type Liturgia {
         data: String!
-        leitura: String!
-        evangelho: String!
+        celebracao: String!
+        cor: String!
+        leitura: ConteudoLeitura
+        salmo: ConteudoLeitura
+        evangelho: ConteudoLeitura
     }
 
     type Query {
         santoDoDia: Santo
 
-        liturgiaDoDia(data: String!): Lirutgia
+        liturgiaDoDia: Liturgia
         buscarSanto(nome: String!): [Santo]
     }
 

@@ -1,5 +1,41 @@
+import { ApolloServer } from "@apollo/server";
+import { startServerAndCreateNextHandler } from "@as-integrations/next";
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import axios from "axios";
 
+const typeDefs = `#graphql
+    type Santo {
+        id: ID!
+        nome: String!
+        historia: String
+        imagemUrl: String
+    }
+
+    type ConteudoLeitura {
+        referencia: String
+        titulo: String
+        texto: String
+    }
+
+    type Liturgia {
+        data: String!
+        celebracao: String!
+        cor: String!
+        leitura: ConteudoLeitura
+        salmo: ConteudoLeitura
+        evangelho: ConteudoLeitura
+    }
+
+    type Query {
+        santoDoDia: Santo
+
+        liturgiaDoDia: Liturgia
+        buscarSanto(nome: String!): [Santo]
+    }
+`;
+
+let cacheLiturgia: any = null;
+let ultimaBusca: number = 0;
 const santos = [
   {
     id: "1",
@@ -15,10 +51,7 @@ const santos = [
   },
 ];
 
-let cacheLiturgia: any = null;
-let ultimaBusca: number = 0;
-
-export const resolvers = {
+const resolvers = {
   Query: {
     santoDoDia: () => {
       return santos[0];
@@ -60,3 +93,18 @@ export const resolvers = {
     },
   },
 };
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  introspection: true,
+  plugins: [
+    ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+  ],
+});
+
+export default startServerAndCreateNextHandler(server, {
+  async context(req, res) {
+    return { req, res };
+  },
+});

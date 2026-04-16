@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^5.5.0",
+    "@as-integrations/next": "^4.1.0",
     "apollo-server": "^3.13.0",
+    "axios": "^1.15.0",
     "graphql": "^16.13.2",
     "save-dev": "^0.0.1-security",
     "tsx": "^4.21.0"
