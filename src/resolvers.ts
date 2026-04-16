@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const santos = [
   {
     id: "1",
@@ -13,6 +15,9 @@ const santos = [
   },
 ];
 
+let cacheLiturgia: any = null;
+let ultimaBusca: number = 0;
+
 export const resolvers = {
   Query: {
     santoDoDia: () => {
@@ -25,12 +30,33 @@ export const resolvers = {
       );
     },
 
-    liturgiaDoDia: (_: any, args: { data: string }) => {
-      return {
-        data: args.data,
-        leitura: "Leitura do Livro de Gênesis",
-        evangelho: "Proclamação do Evangelho de Jesus Cristo segundo Mateus",
-      };
-    }
+    liturgiaDoDia: async () => {
+      const AGORA = Date.now();
+      const UMA_HORA = 3600000;
+
+      if (cacheLiturgia && AGORA - ultimaBusca < UMA_HORA) {
+        console.log("Servindo liturgia do Cache 🛡️");
+        return cacheLiturgia;
+      }
+
+      try {
+        const response = await axios.get("https://liturgia.up.railway.app/v2/");
+
+        cacheLiturgia = {
+          data: response.data.data,
+          celebracao: response.data.liturgia,
+          cor: response.data.cor,
+          leitura: response.data.leituras.primeiraLeitura[0],
+          salmo: response.data.leituras.salmo[0],
+          evangelho: response.data.leituras.evangelho[0],
+        };
+
+        ultimaBusca = AGORA;
+        return cacheLiturgia;
+      } catch (error) {
+        if (cacheLiturgia) return cacheLiturgia;
+        throw new Error("API de Liturgia indisponível.");
+      }
+    },
   },
 };
