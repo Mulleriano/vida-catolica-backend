@@ -16,7 +16,6 @@ const santos = [
 ];
 
 let cacheLiturgia: any = null;
-let ultimaBusca: number = 0;
 
 export const resolvers = {
   Query: {
@@ -31,16 +30,24 @@ export const resolvers = {
     },
 
     liturgiaDoDia: async () => {
-      const AGORA = Date.now();
-      const UMA_HORA = 3600000;
+      const hoje = new Date().toLocaleDateString("pt-BR", {
+        timeZone: "America/Sao_Paulo",
+      });
 
-      if (cacheLiturgia && AGORA - ultimaBusca < UMA_HORA) {
-        console.log("Servindo liturgia do Cache 🛡️");
+      if (cacheLiturgia && cacheLiturgia.data === hoje) {
         return cacheLiturgia;
       }
 
       try {
-        const response = await axios.get("https://liturgia.up.railway.app/v2/");
+       const LITURGIA_URL = process.env.LITURGIA_API_URL;
+
+       if (!LITURGIA_URL) {
+         throw new Error(
+           "ERRO: A variável de ambiente LITURGIA_API_URL não foi definida!",
+         );
+       }
+
+       const response = await axios.get(LITURGIA_URL);
 
         cacheLiturgia = {
           data: response.data.data,
@@ -51,7 +58,6 @@ export const resolvers = {
           evangelho: response.data.leituras.evangelho[0],
         };
 
-        ultimaBusca = AGORA;
         return cacheLiturgia;
       } catch (error) {
         if (cacheLiturgia) return cacheLiturgia;
