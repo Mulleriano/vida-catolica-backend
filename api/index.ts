@@ -9,7 +9,7 @@ const apolloHandler = startServerAndCreateNextHandler(server);
 export default async function handler(req: any, res: any) {
  const allowedOrigins = [
    "http://localhost:5173",
-   "https://vida-catolica-nlou5jmrw-mullerianos-projects.vercel.app",
+   "https://vida-catolica-git-dev-mullerianos-projects.vercel.app",
    "https://vida-catolica-three.vercel.app",
  ];
 
