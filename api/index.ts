@@ -1,15 +1,15 @@
 import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
-import { typeDefs } from "./schema.ts";
-import { resolvers } from "./resolvers.ts";
+import { typeDefs } from "./schema";
+import { resolvers } from "./resolvers";
 
 const server = new ApolloServer({ typeDefs, resolvers, introspection: true });
 const apolloHandler = startServerAndCreateNextHandler(server);
 
 export default async function handler(req: any, res: any) {
   const allowedOrigins = [
-    "http://localhost:5173",
-    "https://meu-app.vercel.app",
+    "http://localhost:5173/",
+    "https://vida-catolica-three.vercel.app/",
   ];
 
   const origin = req.headers.origin;
