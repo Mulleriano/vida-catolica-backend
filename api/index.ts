@@ -1,14 +1,21 @@
 import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
-import { typeDefs } from "../src/schema";
-import { resolvers } from "../src/resolvers";
+import { typeDefs } from "./schema";
+import { resolvers } from "./resolvers";
 
 const server = new ApolloServer({ typeDefs, resolvers, introspection: true });
 const apolloHandler = startServerAndCreateNextHandler(server);
 
 export default async function handler(req: any, res: any) {
-  // Cabeçalhos de Guerra contra o CORS
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "https://meu-app.vercel.app",
+  ];
+  const origin = req.headers.origin;
+  
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET,OPTIONS,PATCH,DELETE,POST,PUT",
