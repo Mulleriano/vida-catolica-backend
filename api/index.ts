@@ -7,19 +7,22 @@ const server = new ApolloServer({ typeDefs, resolvers, introspection: true });
 const apolloHandler = startServerAndCreateNextHandler(server);
 
 export default async function handler(req: any, res: any) {
-  const allowedOrigins = [
-    "http://localhost:5173/",
-    "https://vida-catolica-three.vercel.app/",
-  ];
+ const allowedOrigins = [
+   "http://localhost:5173",
+   "https://vida-catolica-three.vercel.app",
+ ];
 
-  const origin = req.headers.origin;
+ const origin = req.headers.origin;
 
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  // if (origin && allowedOrigins.includes(origin)) {
-  //   res.setHeader("Access-Control-Allow-Origin", origin);
-  // } else if (!origin) {
-  //   res.setHeader("Access-Control-Allow-Origin", "*");
-  // }
+ if (origin) {
+   const sanitizedOrigin = origin.replace(/\/$/, "");
+
+   if (allowedOrigins.includes(sanitizedOrigin)) {
+     res.setHeader("Access-Control-Allow-Origin", origin);
+   }
+ } else {
+   res.setHeader("Access-Control-Allow-Origin", "*");
+ }
 
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader(
