@@ -1,5 +1,9 @@
-export default function getLiturgyHexColor(corNome: string): { hex: string; hexTexto: string } {
-  const cor = { hex: "", hexTexto: "" };
+export default function getLiturgyHexColor(corNome: string): {
+  nome: string;
+  hex: string;
+  hexTexto: string;
+} {
+  const cor = { nome: corNome, hex: "", hexTexto: "" };
   switch (corNome.toLowerCase()) {
     case "verde":
       cor.hex = "#3cca5b";
@@ -16,7 +20,7 @@ export default function getLiturgyHexColor(corNome: string): { hex: string; hexT
       cor.hexTexto = "#191919";
     case "branco":
       cor.hex = "#FFFFFF";
-        cor.hexTexto = "#191919";
+      cor.hexTexto = "#191919";
   }
 
   return cor;
