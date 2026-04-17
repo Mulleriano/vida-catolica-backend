@@ -1,4 +1,4 @@
-import getHexColors from "./utils/getHexColors.ts";
+import getHexColors from "./utils/getHexColors.js";
 import axios from "axios";
 
 const santos = [
