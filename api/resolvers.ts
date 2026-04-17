@@ -1,3 +1,4 @@
+import getHexColors from "./utils/getHexColors.ts";
 import axios from "axios";
 
 const santos = [
@@ -52,7 +53,7 @@ export const resolvers = {
         cacheLiturgia = {
           data: response.data.data,
           celebracao: response.data.liturgia,
-          cor: response.data.cor,
+          cor: getHexColors(response.data.cor),
           leitura: response.data.leituras.primeiraLeitura[0],
           salmo: response.data.leituras.salmo[0],
           evangelho: response.data.leituras.evangelho[0],
